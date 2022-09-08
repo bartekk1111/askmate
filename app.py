@@ -1,4 +1,3 @@
-from urllib import request
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -40,7 +39,7 @@ def index():
         return render_template('index.html', tasks=tasks)
 
 
-@app.route("/questions", methods=['POST', 'GET'])
+@app.route("/table", methods=['POST', 'GET'])
 def table():
     if request.method == 'POST':
         task_title = request.form['title']
@@ -85,14 +84,22 @@ def update(id):
         return render_template('update.html', task=task)
 
 
-# @app.route("/questions")
-# def questions_list():
-#     questions = data_handler.get_all_questions()
-#     for question in questions:
-#         question["submission_time"] = datetime.datetime.fromtimestamp(int(question["submission_time"]))
-#     print(questions)
-#     return render_template("questions.html", title="Question list!", questions=questions)
+@app.route("/questions", methods=['POST', 'GET'])
+def questions_list():
+    if request.method == 'POST':
+        task_title = request.form['title']
+        task_content = request.form['content']
+        new_task = Todo(content=task_content, title=task_title)
 
+        try:
+            db.session.add(new_task)
+            db.session.commit()
+            return redirect('/questions')
+        except:
+            return 'There was an issue adding your task'
+    else:
+        tasks = Todo.query.order_by(Todo.date_created).all()
+        return render_template('questions.html', tasks=tasks)
 
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
 def question_answers(id):
