@@ -1,4 +1,4 @@
-###Visit https://askmte.herokuapp.com/
+### To see how it looks visit https://askmte.herokuapp.com/
 
 # AskMate (sprint 1)
 
