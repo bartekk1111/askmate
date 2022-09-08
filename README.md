@@ -1,3 +1,5 @@
+###Visit https://askmte.herokuapp.com/
+
 # AskMate (sprint 1)
 
 ## Story
