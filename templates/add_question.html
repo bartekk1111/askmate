@@ -10,7 +10,7 @@
     {% else %}
         <title>AskMate | Welcome!</title>
     {% endif %}
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename="assets/favicon.ico") }}"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
           rel="stylesheet" type="text/css"/>
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename="css/styles.css") }}" rel="stylesheet"/>
 </head>
 <body>
 <!-- Navigation-->
@@ -92,6 +92,13 @@
                             <div class="invalid-feedback" data-sb-feedback="content:required">A content is required.
                             </div>
                         </div>
+                        
+                        <div class="form-floating">
+                            <textarea class="form-control" type="text" name="author" id="author"></textarea>
+                            <label for="author">Author</label>
+                            <div class="invalid-feedback" data-sb-feedback="author:required">A author name is required.
+                            </div>
+                        </div>
 
                         <br/>
                         <!-- Submit success message-->
@@ -116,13 +123,6 @@
                         <!-- Submit Button-->
                         <input type="submit" value="Ask a question">
                     </form>
-
-{#                   Old form#}
-{#                    <form action="/" method="POST">#}
-{#                        <input type="text" name="content" id="content" value="Content">#}
-{#                        <input type="text" name="title" id="title" value="Title">#}
-{#                        <input type="submit" value="Add Task">#}
-{#                    </form>#}
 
                 </div>
             </div>

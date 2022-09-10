@@ -12,17 +12,19 @@
     {% else %}
         <table>
             <tr>
-                <th> Title</th>
-                <th> Message</th>
-                <th> Creation Date</th>
-                <th> Views</th>
-                <th> Votes</th>
+                <th> Title </th>
+                <th> Message </th>
+                <th> Author </th>
+                <th> Creation Date </th>
+                <th> Views </th>
+                <th> Votes </th>
 
             </tr>
             {% for task in tasks %}
                 <tr>
                     <td>{{ task.title }}</td>
                     <td>{{ task.content }}</td>
+                    <td>{{ task.author }}</td>
                     <td>{{ task.date_created.date() }}</td>
                     <td>{{ task.view_number }}</td>
                     <td>{{ task.vote_number }}</td>
@@ -38,9 +40,9 @@
     <form action="/" method="POST">
         <input type="text" name="content" id="content" value="Content">
         <input type="text" name="title" id="title" value="Title">
+        <input type="text" name="author" id="author" value="Author">
         <input type="submit" value="Add Task">
     </form>
-
 </div>
 </body>
 </html>
