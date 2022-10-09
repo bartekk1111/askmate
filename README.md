@@ -1,5 +1,3 @@
-### To see how it looks visit https://askmte.herokuapp.com/
-
 # AskMate (sprint 1)
 
 ## Story

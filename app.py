@@ -55,7 +55,7 @@ def index():
 
 
 @app.route("/questions", methods=['POST', 'GET'])
-def table():
+def questions():
     if request.method == 'POST':
         task_title = request.form['title']
         task_content = request.form['content']
@@ -162,6 +162,13 @@ def add_question():
 @app.route("/about")
 def about():
     return render_template("about.html", title="About!")
+
+
+@app.route("/table")
+def table():    
+    tasks = Questions.query.order_by(Questions.date_created).all()
+    return render_template("table.html", tasks=tasks)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

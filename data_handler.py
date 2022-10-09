@@ -1,61 +1,96 @@
-import csv
-import os
+import connection_to_database
 
-QUESTION_FILE_PATH = os.getenv('QUESTION_FILE_PATH') if 'QUESTION_FILE_PATH' in os.environ else 'sample_data/question.csv'
-ANSWER_FILE_PATH = os.getenv('ANSWER_FILE_PATH') if 'ANSWER_FILE_PATH' in os.environ else 'sample_data/answer.csv'
-SEPARATOR = ";"
-QUESTION_HEADER = ["id","submission_time","view_number","vote_number","title","message","image"]
-def get_all_questions():
-    questions = []
-    with open(QUESTION_FILE_PATH, encoding="utf-8") as file:
-        dict_reader = csv.DictReader(file)
-        for line in dict_reader:
-            question = dict(line)
-            questions.append(question)
-    return questions
+
+@connection_to_database.connection_handler
+def delete_row(cursor, row_id):
+    query = f"""
+                DELETE FROM questions
+                WHERE id = {row_id};
+                """
+    cursor.execute(query)
+
+
+@connection_to_database.connection_handler
+def alter_row(cursor, row_id, column_to_alter, new_value):
+    query = f"""
+            UPDATE questions
+            SET {column_to_alter} = '{new_value}'
+            WHERE id = {row_id};
+            """
+    cursor.execute(query)
+
+
+@connection_to_database.connection_handler
+def get_all_questions(cursor):
+    query = """
+            SELECT *
+            FROM questions
+            ORDER BY date_created DESC"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_to_database.connection_handler
+def get_top_questions(cursor, limit):
+    query = """
+            SELECT *
+            FROM questions
+            ORDER BY date_created DESC
+            LIMIT %s"""
+    cursor.execute(query, limit)
+    return cursor.fetchall()
+
 
 def get_answers():
-    answers = []
-    with open(ANSWER_FILE_PATH, encoding="utf-8") as file:
-        dict_reader = csv.DictReader(file)
-        for line in dict_reader:
-            answer = dict(line)
-            answers.append(answer)
-    return answers
+    pass
 
-def read_questions():
-    questions = []
-    with open(QUESTION_FILE_PATH, "r") as file:
-        reader = csv.DictReader(file)
-        for line in reader:
-            question = dict(line)
-            questions.append(question)
-    return questions
 
-def save_question(question):
-    with open(QUESTION_FILE_PATH, "a") as file:
-        file.write(f"{question['id']};{question['text']}\n")
+@connection_to_database.connection_handler
+def read_question(cursor, question_id):
+    query = """
+        SELECT * FROM questions WHERE id = (%(id)s)
+        """
+    cursor.execute(query, {"id": question_id})
+    return cursor.fetchall()
+
+
+@connection_to_database.connection_handler
+def get_user(cursor, email):
+    query = """
+        SELECT * FROM users WHERE user_email = (%(email)s)
+        """
+    cursor.execute(query, {"email": email})
+    return cursor.fetchall()
+
+
+@connection_to_database.connection_handler
+def save_question(cursor, question):
+    query = """
+        INSERT INTO
+        questions (title, content, date_created)
+        values ( %(title)s, %(content)s, %(date_created)s )"""
+    cursor.execute(query, {"title": question['title'],
+                           "content": question['content'],
+                           "date_created": question['date_created']})
+
+
+@connection_to_database.connection_handler
+def save_answer(cursor, answer):
+    query = """
+        INSERT INTO
+        answers (content)
+        values (%(content)s)"""
+    cursor.execute(query, {"content": answer['content']})
+
+@connection_to_database.connection_handler
+def add_user(cursor, user):
+    query = """
+        INSERT INTO
+        public.users (user_name, user_email, user_password)
+        values ( %(name)s, %(email)s, %(password)s )"""
+    cursor.execute(query, {"email": user['user_email'],
+                           "password": user['user_password'],
+                           "name": user['user_name']})
 
 def read_write():
-    questions = []
-    with open(QUESTION_FILE_PATH, encoding="utf-8") as file:
-        dict_reader = csv.DictReader(file)
-        print(dict_reader)
-        for line in dict_reader:
-            print(line)
-            question = dict(line)
-            questions.append(question)
-        question = {"id": "3","submission_time": "1493068124","view_number": "20","vote_number": "8",
-                    "title": "jakiś tytuł","message": "jakaś wiadomość"}
-        questions.append(question)
-        print(questions)
-    return questions
-
-def write_question(question):
-    questions = read_questions()
-    with open(QUESTION_FILE_PATH, "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=QUESTION_HEADER)
-        writer.writeheader()
-        for item in questions:
-            writer.writerow(item)
-        writer.writerow(question)
+    pass
