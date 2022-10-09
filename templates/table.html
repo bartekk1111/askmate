@@ -1,48 +1,48 @@
-{% extends "layout.html" %}
-{% block main_content %}
-    <div class="content">
-        <h1 style="text-align: center">Questions table</h1>
-        {% if questions|length < 1 %}
-            <h4 style="text-align: center">There are no questions. Create one below!</h4>
-        {% else %}
-            <table class="table">
-                <thead>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+</head>
+<body>
+<div class="content">
+    <h1 style="text-align: center"> Questions</h1>
+    {% if tasks|length < 1 %}
+        <h4 style="text-align: center">There are no questions. Create one below!</h4>
+    {% else %}
+        <table>
+            <tr>
+                <th> Title </th>
+                <th> Message </th>
+                <th> Author </th>
+                <th> Creation Date </th>
+                <th> Views </th>
+                <th> Votes </th>
+
+            </tr>
+            {% for task in tasks %}
                 <tr>
-                    <th> ID</th>
-                    <th>Title</th>
-                    <th>Question</th>
-                    <th>Author</th>
-                    <th>Creation Date</th>
-                    <th>Views</th>
-                    <th>Votes</th>
-                    <th>Action</th>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.content }}</td>
+                    <td>{{ task.author }}</td>
+                    <td>{{ task.date_created.date() }}</td>
+                    <td>{{ task.view_number }}</td>
+                    <td>{{ task.vote_number }}</td>
+                    <td>
+                        <a href="/delete/{{ task.id }}"> Delete</a>
+                        <br>
+                        <a href="/update/{{ task.id }}"> Update</a>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for question in questions %}
-                    <tr>
-                        <td>{{ question.id }}</td>
-                        <td>{{ question.title }}</td>
-                        <td>{{ question.content }}</td>
-                        <td>{{ question.user_id }}</td>
-                        <td>{{ question.date_created }}</td>
-                        <td>{{ question.view_number }}</td>
-                        <td>{{ question.vote_number }}</td>
-                        <td>
-                            <a href="/delete/{{ question.id }}"> Delete</a>
-                            <br>
-                            <a href="/update/{{ question.id }}"> Update</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        <form action="/add_question" method="POST">
-            <input type="text" name="content" id="content" value="Content">
-            <input type="text" name="title" id="title" value="Title">
-            <input type="text" name="author" id="author" value="Author">
-            <input type="submit" value="Add Task">
-        </form>
-    </div>
-{% endblock %}
+            {% endfor %}
+        </table>
+    {% endif %}
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content" value="Content">
+        <input type="text" name="title" id="title" value="Title">
+        <input type="text" name="author" id="author" value="Author">
+        <input type="submit" value="Add Task">
+    </form>
+</div>
+</body>
+</html>
